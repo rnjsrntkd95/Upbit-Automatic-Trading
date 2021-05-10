@@ -55,7 +55,7 @@ const trading = async () => {
         }
 
         // 매도 조건 1: 골든크로스 발생 이후, 15일선-50일선 차이*K 보다 하락 시
-        if (goldenCross && (m15Avg - m50Avg)*K > loadingData.price) {
+        if ((m15Avg - m50Avg)*K > loadingData.price) {
             sellingBot();
         }
     } catch (err) {
