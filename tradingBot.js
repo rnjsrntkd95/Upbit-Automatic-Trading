@@ -60,5 +60,5 @@ const trading = async () => {
 
  const tradingBtn = setInterval(()=> {
      trading();
- }, 1000);
- //baseM*60000
+ }, baseM*60000);
+
