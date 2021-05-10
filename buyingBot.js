@@ -69,7 +69,7 @@ const buying = () => {
         
         request(options, (error, response, newBody) => {
             if (error) throw new Error(error)
-            console.log('매수');
+            console.log('Buying');
         })
     })
 }
