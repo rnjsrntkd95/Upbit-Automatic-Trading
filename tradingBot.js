@@ -1,7 +1,6 @@
 const priceBot = require('./priceBot.js');
 const buyingBot = require('./buyingBot.js');
 const sellingBot = require('./sellingBot.js');
-const buying = require('./buyingBot.js');
 
 
 const m15AvgLine = [];
@@ -20,10 +19,7 @@ let dday;
 const ex5m15Avg = [];
 const ex5m50Avg = [];
 
-
-
 const trading = async () => {
-
     let loadingData;
 
     try {
@@ -48,22 +44,22 @@ const trading = async () => {
         ex5m15Avg.push(m15Avg);
         ex5m50Avg.push(m50Avg);
 
-
-
-        console.log(`${coin} Price(${loadingData.price}), 15M(${m15Avg}), 50M(${m50Avg}), GC(${goldenCross})`);
         if (m50AvgLine.length < 50) return;
 
         if (!goldenCross && m15Avg > m50Avg) goldenCross = true;
         if (goldenCross && m15Avg < m50Avg) goldenCross = false;
+
+        console.log(`${coin} Price(${loadingData.price}), 15M(${m15Avg}), 50M(${m50Avg}), GC(${goldenCross})`);
         
         // 15,50 이평선 기울기 관통 예측
         if (!goldenCross && !exGC) {
             let slopeDiff = (ex5m50Avg[0] - ex5m15Avg[0]) / ((m15Avg - ex5m15Avg[0]) - (m50Avg - ex5m50Avg[0]));
+            console.log(`Slope Difference - ${slopeDiff}`)
             // 예측 매수
             if (UsePredict && slopeDiff < 1 && slopeDiff > 0) {
                 exGC = true;
                 dday = Math.round(exM *slopeDiff*1.7);
-                buyingBot();
+                buyingBot(coin);
                 console.log(`Predict buying D-day(${dday})`)
                 return;
             }
@@ -73,7 +69,7 @@ const trading = async () => {
         // 매수 조건 1: 골든 크로스 발생 , 현재가가 15일선보다 위에 위치 시,
         if (!UsePredict &&goldenCross) {
             if (loadingData.price > m15Avg) {
-                buyingBot();
+                buyingBot(coin);
                 return;
             }
         }
@@ -86,6 +82,7 @@ const trading = async () => {
             } else if (dday <= 0) {
                 console.log("Selling : Failure Predict");
                 exGC = false;
+                sellingBot();
                 return;
             }
         }

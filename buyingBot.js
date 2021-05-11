@@ -12,7 +12,7 @@ const access_key = keyData.access_key;
 const secret_key = keyData.secret_key;
 const server_url = "https://api.upbit.com"
 
-const buying = () => {
+const buying = (coin) => {
 
     // 잔고 확인
     const profilePayload = {
@@ -31,14 +31,13 @@ const buying = () => {
     request(options, (error, response, body) => {
         if (error) throw new Error(error)
 
-        const currency = JSON.parse(body)[0].currency;
         const balance = JSON.parse(body)[0].balance;
         
         // 최소 거래금액 5000
         if (balance < 5000) return;
 
         const newReqBody = {
-            market: `KRW-${currency}`,
+            market: `KRW-${coin}`,
             side: 'bid',
             price: parseInt(balance*0.9995), // 수수료 0.05%
             ord_type: 'price',
@@ -67,6 +66,7 @@ const buying = () => {
         
         request(options, (error, response, newBody) => {
             if (error) throw new Error(error)
+            console.log(newBody)
             console.log('Buying');
         })
     })

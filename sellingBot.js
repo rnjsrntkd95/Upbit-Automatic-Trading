@@ -66,6 +66,7 @@ const selling = () => {
         
         request(options, (error, response, newBody) => {
             if (error) throw new Error(error)
+            console.log(newBody);
             console.log('Selling');
         })
     })
