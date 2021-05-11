@@ -33,8 +33,6 @@ const buying = () => {
 
         const currency = JSON.parse(body)[0].currency;
         const balance = JSON.parse(body)[0].balance;
-
-        console.log(`잔고: ${parseInt(balance)}`)
         
         // 최소 거래금액 5000
         if (balance < 5000) return;
