@@ -11,7 +11,7 @@ let m15Sum = 0, m50Sum = 0;
 let goldenCross = false;
 const K = 1; // 배수
 const baseM = 1; // 분봉
-const coin = 'XRP' // 종목명
+const coin = 'DOGE' // 종목명
 
 const UsePredict = true; // 예측 매수 사용 여부 
 const exM = 3; // 예측 기준 (1분봉 3exM, 10분봉 5exM)
@@ -67,13 +67,12 @@ const trading = async () => {
         if (goldenCross && m15Avg < m50Avg) goldenCross = false;
 
         console.log(`${coin} Price(${loadingData.price}), 15M(${m15Avg}), 50M(${m50Avg}), GC(${goldenCross})`);
-        if (m50AvgLine.length < 50 && ex5m50Avg.length < exM) return;
-
+        if (m50AvgLine.length < 50 || ex5m50Avg.length < exM) return;
         // 15,50 이평선 기울기 관통 예측
         if (!goldenCross && !exGC) {
             //let slopeDiff = (ex5m50Avg[0] - ex5m15Avg[0]) / ((m15Avg - ex5m15Avg[0]) - (m50Avg - ex5m50Avg[0]));
-            let slopeDiff = 2 * (m15Avg-m50Avg) - (ex5m15Avg + ex5m50Avg)
-            
+            let slopeDiff = 2 * (m15Avg-m50Avg) - (ex5m15Avg[0] - ex5m50Avg[0])
+
             console.log(`Slope Difference - ${slopeDiff}`)
             // 예측 매수
             if (UsePredict && slopeDiff > 0) {
@@ -120,5 +119,5 @@ const trading = async () => {
 
  const tradingBtn = setInterval(()=> {
      trading();
- }, baseM*60000);
+ }, 1000);
 
